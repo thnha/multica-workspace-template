@@ -1,0 +1,6 @@
+{
+  "name": "workflow-state-protocol",
+  "description": "Record stage evidence and workflow state separately from Multica issue lifecycle status.",
+  "config": {},
+  "labels": []
+}

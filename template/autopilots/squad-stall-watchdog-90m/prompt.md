@@ -1,0 +1,10 @@
+Squad stall watchdog. Detect squad workflows where the leader stopped without handing off, and nudge once. Do not do any engineering work yourself.
+
+1. List issues assigned to the Engineering Squad (squad id {{@squad:Engineering Squad}}) with status in_progress. Ignore todo, backlog, blocked, in_review, done, cancelled.
+2. For each such issue:
+   a. Skip if `multica issue runs <issue> --active --output json` shows a queued or running run, or if any child (`multica issue children <issue>`) has an active run.
+   b. Read `multica issue timeline <issue> --output json`. Skip if the latest event is younger than 90 minutes.
+   c. Skip if the latest leader comment asks the requester to decide ("Cần bạn quyết: CÓ") — that is waiting on a human, not stalled.
+   d. If the latest comment on the issue is already a watchdog nudge (starts with "[Watchdog]") and nothing happened after it, do NOT nudge the leader again. Instead post one comment mentioning the requester [@Trần Hoàng Nhã](mention://member/{{@member:thediffest@gmail.com}}) that the issue is still stalled after a nudge — unless such an escalation comment already exists after that nudge.
+   e. Otherwise post one comment (use --content-file, written in the working directory) starting with "[Watchdog]" and mentioning [@Feature Orchestrator](mention://agent/{{@agent:Feature Orchestrator}}). Include: minutes since the last event, the last gate/dispatch comment summary, open children and their statuses, and the instruction "You are the parent owner of the next step (SINGLE OWNER FOR THE NEXT STEP). Close any delivered child and dispatch or decide the next step in this turn; do not defer to another run."
+3. Never change issue status, assignment, or PRs. At most one comment per issue per run. If nothing is stalled, finish without posting anything.

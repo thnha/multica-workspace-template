@@ -1,0 +1,6 @@
+{
+  "name": "codebase-exploration",
+  "description": "Inspect relevant code, tests, contracts, and configuration before designing changes to an existing repository; document verified current architecture and constraints.",
+  "config": {},
+  "labels": []
+}

@@ -1,0 +1,6 @@
+{
+  "name": "qa-test-report",
+  "description": "Produce a structured QA Test Report from executed validation, mapping requirements and acceptance criteria to test results, defects, regression coverage, evidence, and a final QA assessment.",
+  "config": {},
+  "labels": []
+}

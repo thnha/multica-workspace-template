@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Mode",
+    "type": "select",
+    "icon": "target",
+    "description": "Clarify: request clarification on requirements | Analysis: analyze current state, no code changes | Plan only: spec → design → plan, then stop | Plan + Implement: plan, your approval, then implementation | Implement: execute based on approved plan (link to plan) | Review: review PR/branch (link to PR), no changes | Quick fix: minor fix, 1 PR + Code Review, no planning phase",
+    "options": [
+      {
+        "name": "Plan only",
+        "color": "#3b82f6"
+      },
+      {
+        "name": "Plan + Implement",
+        "color": "#22c55e"
+      },
+      {
+        "name": "Implement",
+        "color": "#f97316"
+      },
+      {
+        "name": "Clarify",
+        "color": "#eab308"
+      },
+      {
+        "name": "Analysis",
+        "color": "#22c55e"
+      },
+      {
+        "name": "Review",
+        "color": "#14b8a6"
+      },
+      {
+        "name": "Quick fix",
+        "color": "#3b82f6"
+      }
+    ]
+  },
+  {
+    "name": "QA",
+    "type": "select",
+    "icon": "shield",
+    "description": "",
+    "options": [
+      {
+        "name": "Skip",
+        "color": "#22c55e"
+      },
+      {
+        "name": "Cuối milestone",
+        "color": "#ef4444"
+      },
+      {
+        "name": "Từng package",
+        "color": "#f97316"
+      }
+    ]
+  },
+  {
+    "name": "Max rounds",
+    "type": "select",
+    "icon": "layers-3",
+    "description": "",
+    "options": [
+      {
+        "name": "1",
+        "color": "#3b82f6"
+      },
+      {
+        "name": "2",
+        "color": "#ef4444"
+      },
+      {
+        "name": "3",
+        "color": "#f97316"
+      },
+      {
+        "name": "4",
+        "color": "#eab308"
+      },
+      {
+        "name": "5",
+        "color": "#22c55e"
+      }
+    ]
+  }
+]

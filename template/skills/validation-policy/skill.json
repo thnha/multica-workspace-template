@@ -1,0 +1,6 @@
+{
+  "name": "validation-policy",
+  "description": "Select risk-appropriate validation and explicitly report failed or skipped checks.",
+  "config": {},
+  "labels": []
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Squad stall watchdog (90m)",
+  "agent": "Multica Support Agent",
+  "mode": "run_only",
+  "issue_title_template": "",
+  "project": null,
+  "subscribers": [],
+  "status_in_source": "active",
+  "triggers": [
+    {
+      "kind": "schedule",
+      "cron": "0 0-21/3 * * *",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "label": "90m cadence (:00)",
+      "enabled": true
+    },
+    {
+      "kind": "schedule",
+      "cron": "30 1-22/3 * * *",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "label": "90m cadence (:30)",
+      "enabled": true
+    }
+  ]
+}

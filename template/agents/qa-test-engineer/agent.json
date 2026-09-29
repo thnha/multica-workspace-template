@@ -1,0 +1,28 @@
+{
+  "name": "QA / Test Engineer",
+  "description": "Independent QA agent validating implemented behavior against requirements and acceptance criteria.",
+  "avatar": "emoji:🐙",
+  "runtime_provider": "opencode",
+  "runtime_name_hint": "Opencode (NhaTran-PC)",
+  "model": "opencode-go/glm-5.3",
+  "thinking_level": "",
+  "service_tier": "",
+  "max_concurrent_tasks": 6,
+  "custom_args": [],
+  "runtime_config": {},
+  "conversation_starters": [],
+  "permission_mode": "public_to",
+  "public_to_workspace": true,
+  "public_to_members": [],
+  "skills": [
+    "engineering-core",
+    "handoff-policy",
+    "qa-testing",
+    "qa-test-report",
+    "workflow-gate-policy",
+    "workflow-state-protocol"
+  ],
+  "custom_env_keys": [],
+  "custom_env_key_count": 0,
+  "needs_mcp_config": false
+}

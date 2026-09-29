@@ -1,0 +1,6 @@
+{
+  "name": "impact-analysis",
+  "description": "Assess direct, indirect, and potential effects of a proposed feature before implementation; identify affected components, consumers, dependencies, risks, and required actions.",
+  "config": {},
+  "labels": []
+}

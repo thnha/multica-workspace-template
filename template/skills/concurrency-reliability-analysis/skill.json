@@ -1,0 +1,6 @@
+{
+  "name": "concurrency-reliability-analysis",
+  "description": "Analyze races, duplicate operations, retries, and partial failures when features mutate shared state or use distributed execution; define transaction, idempotency, recovery, and validation strategies.",
+  "config": {},
+  "labels": []
+}

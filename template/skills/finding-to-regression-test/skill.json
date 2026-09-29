@@ -1,0 +1,6 @@
+{
+  "name": "finding-to-regression-test",
+  "description": "Turn an adversarial finding into a failing regression test on the reviewed head, hand it to the developer as a locked test on a separate branch, verify the fix turns it green, and produce the Adversarial Review Report with ADVERSARIAL_REVIEW_* workflow evidence.",
+  "config": {},
+  "labels": []
+}

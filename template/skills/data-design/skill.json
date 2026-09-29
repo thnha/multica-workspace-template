@@ -1,0 +1,6 @@
+{
+  "name": "data-design",
+  "description": "Design persistent data changes for approved requirements, using existing schema and storage patterns to define ownership, integrity constraints, indexes, and migration implications.",
+  "config": {},
+  "labels": []
+}

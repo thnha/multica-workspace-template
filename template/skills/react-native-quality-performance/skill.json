@@ -1,0 +1,6 @@
+{
+  "name": "react-native-quality-performance",
+  "description": "Review React Native changes for rendering efficiency, lifecycle safety, list performance, resource cleanup, asynchronous behavior, and mobile performance regressions.",
+  "config": {},
+  "labels": []
+}

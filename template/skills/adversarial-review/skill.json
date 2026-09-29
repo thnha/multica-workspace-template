@@ -1,0 +1,6 @@
+{
+  "name": "adversarial-review",
+  "description": "Attack an implementation against its declared invariants (INV-xxx) — concurrency, races, duplicate delivery, retries after unknown outcome, partial failure, ownership — and report only attacks backed by a reproducing test or a precise, testable scenario.",
+  "config": {},
+  "labels": []
+}

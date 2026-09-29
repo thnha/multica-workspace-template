@@ -1,0 +1,6 @@
+{
+  "name": "api-contract-design",
+  "description": "Design API, message, and event contracts when a feature changes system interfaces, following existing conventions for validation, authorization, errors, idempotency, and compatibility.",
+  "config": {},
+  "labels": []
+}

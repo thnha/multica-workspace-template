@@ -1,0 +1,48 @@
+{
+  "name": "Engineering Squad",
+  "description": "Evidence-driven software engineering squad with complexity-based workflows and independent quality gates.",
+  "avatar_url": null,
+  "leader": "Feature Orchestrator",
+  "members": [
+    {
+      "type": "agent",
+      "agent": "Software Architect",
+      "role": "Technical design (LARGE)"
+    },
+    {
+      "type": "agent",
+      "agent": "Feature Analyst",
+      "role": "Requirements and acceptance criteria (MEDIUM/LARGE)"
+    },
+    {
+      "type": "agent",
+      "agent": "Implementation Planner",
+      "role": "Implementation planning (LARGE)"
+    },
+    {
+      "type": "agent",
+      "agent": "Code Reviewer",
+      "role": "Independent code review"
+    },
+    {
+      "type": "agent",
+      "agent": "QA / Test Engineer",
+      "role": "QA and acceptance testing"
+    },
+    {
+      "type": "agent",
+      "agent": "Node Js Developer",
+      "role": "Node.js backend implementation"
+    },
+    {
+      "type": "agent",
+      "agent": "React Native Developer",
+      "role": "React Native mobile implementation"
+    },
+    {
+      "type": "agent",
+      "agent": "Adversarial Reviewer",
+      "role": "Adversarial review of invariant-critical changes"
+    }
+  ]
+}

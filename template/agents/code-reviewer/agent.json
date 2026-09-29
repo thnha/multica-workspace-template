@@ -1,0 +1,29 @@
+{
+  "name": "Code Reviewer",
+  "description": "Independent reviewer for correctness, scope, regression, security, maintainability, and test evidence.",
+  "avatar": "emoji:🍀",
+  "runtime_provider": "claude",
+  "runtime_name_hint": "Claude (NhaTran-PC)",
+  "model": "claude-opus-5-5",
+  "thinking_level": "medium",
+  "service_tier": "",
+  "max_concurrent_tasks": 6,
+  "custom_args": [],
+  "runtime_config": {},
+  "conversation_starters": [],
+  "permission_mode": "public_to",
+  "public_to_workspace": true,
+  "public_to_members": [],
+  "skills": [
+    "codebase-quality-audit",
+    "code-change-review",
+    "code-review-report",
+    "engineering-core",
+    "handoff-policy",
+    "workflow-gate-policy",
+    "workflow-state-protocol"
+  ],
+  "custom_env_keys": [],
+  "custom_env_key_count": 0,
+  "needs_mcp_config": false
+}

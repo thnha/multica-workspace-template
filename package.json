@@ -1,0 +1,12 @@
+{
+  "name": "multica-workspace-template",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "export": "node export.mjs",
+    "apply": "node apply.mjs"
+  }
+}

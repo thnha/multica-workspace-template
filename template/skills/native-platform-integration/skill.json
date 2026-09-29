@@ -1,0 +1,6 @@
+{
+  "name": "native-platform-integration",
+  "description": "Implement React Native changes involving iOS, Android, native modules, permissions, device capabilities, lifecycle behavior, and native build configuration.",
+  "config": {},
+  "labels": []
+}

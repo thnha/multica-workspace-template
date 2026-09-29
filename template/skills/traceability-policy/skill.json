@@ -1,0 +1,6 @@
+{
+  "name": "traceability-policy",
+  "description": "Trace requirements through applicable design, implementation, tests, and acceptance criteria.",
+  "config": {},
+  "labels": []
+}

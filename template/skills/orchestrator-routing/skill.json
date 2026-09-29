@@ -1,0 +1,6 @@
+{
+  "name": "orchestrator-routing",
+  "description": "Select engineering stages and specialists; prevent duplicate dispatch and unbounded rework.",
+  "config": {},
+  "labels": []
+}

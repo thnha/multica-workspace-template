@@ -1,0 +1,6 @@
+{
+  "name": "technical-design-output-template",
+  "description": "Use when producing a final Technical Design from an approved Feature Specification; follow the canonical template, preserve requirement traceability, and apply the design Readiness Gate.",
+  "config": {},
+  "labels": []
+}

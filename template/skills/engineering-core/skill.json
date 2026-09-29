@@ -1,0 +1,6 @@
+{
+  "name": "engineering-core",
+  "description": "Shared engineering rules for every squad agent: evidence and uncertainty, scope and destructive changes, validation, traceability, security, completion, and role boundaries.",
+  "config": {},
+  "labels": []
+}

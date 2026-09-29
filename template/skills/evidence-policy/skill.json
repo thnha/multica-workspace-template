@@ -1,0 +1,6 @@
+{
+  "name": "evidence-policy",
+  "description": "Classify engineering evidence and report only verified execution and validation results.",
+  "config": {},
+  "labels": []
+}

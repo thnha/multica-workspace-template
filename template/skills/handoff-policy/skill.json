@@ -1,0 +1,6 @@
+{
+  "name": "handoff-policy",
+  "description": "Transfer durable requirements, artifacts, revisions, validation evidence, and blockers between engineering stages.",
+  "config": {},
+  "labels": []
+}

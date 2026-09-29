@@ -1,0 +1,6 @@
+{
+  "name": "uncertainty-policy",
+  "description": "Distinguish confirmed facts from assumptions and escalate material engineering uncertainty.",
+  "config": {},
+  "labels": []
+}

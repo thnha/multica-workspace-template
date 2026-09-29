@@ -1,0 +1,6 @@
+{
+  "name": "security-policy",
+  "description": "Preserve security boundaries, authorization, data safety, and secret handling during engineering work.",
+  "config": {},
+  "labels": []
+}

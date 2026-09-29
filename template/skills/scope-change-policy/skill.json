@@ -1,0 +1,6 @@
+{
+  "name": "scope-change-policy",
+  "description": "Control engineering scope changes and escalate unapproved requirements or destructive changes.",
+  "config": {},
+  "labels": []
+}

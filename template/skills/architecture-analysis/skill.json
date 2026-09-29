@@ -1,0 +1,6 @@
+{
+  "name": "architecture-analysis",
+  "description": "Analyze how an approved feature fits the existing system; define component responsibilities, boundaries, data flow, and justified architecture decisions before implementation planning.",
+  "config": {},
+  "labels": []
+}

@@ -1,0 +1,6 @@
+{
+  "name": "workflow-classification",
+  "description": "Classify engineering work as SMALL, MEDIUM, or LARGE by impact and risk, and escalate when new evidence appears.",
+  "config": {},
+  "labels": []
+}

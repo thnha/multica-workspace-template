@@ -1,0 +1,6 @@
+{
+  "name": "regression-testing",
+  "description": "Perform targeted regression validation around changed components, dependent flows, and previously working behavior that could be affected by the implementation.",
+  "config": {},
+  "labels": []
+}

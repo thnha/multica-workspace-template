@@ -1,0 +1,6 @@
+{
+  "name": "functional-testing",
+  "description": "Validate implemented feature behavior against requirements and acceptance criteria using observable execution evidence.",
+  "config": {},
+  "labels": []
+}

@@ -1,0 +1,6 @@
+{
+  "name": "completion-policy",
+  "description": "Apply evidence-based task and feature completion gates; distinguish partial delivery from completion.",
+  "config": {},
+  "labels": []
+}

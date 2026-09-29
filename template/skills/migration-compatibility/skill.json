@@ -1,0 +1,6 @@
+{
+  "name": "migration-compatibility",
+  "description": "Plan safe transitions when changes affect schemas, stored data, contracts, or deployments; define supported version combinations, deployment order, backfill, and rollback.",
+  "config": {},
+  "labels": []
+}

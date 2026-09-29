@@ -1,0 +1,6 @@
+{
+  "name": "workflow-gate-policy",
+  "description": "Check stage entry and exit evidence for SMALL, MEDIUM, and LARGE engineering workflows.",
+  "config": {},
+  "labels": []
+}

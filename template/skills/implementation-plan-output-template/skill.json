@@ -1,0 +1,6 @@
+{
+  "name": "implementation-plan-output-template",
+  "description": "Produce repository-grounded Implementation Plans with executable tasks, dependencies, validation, coverage, readiness and durable handoff.",
+  "config": {},
+  "labels": []
+}
