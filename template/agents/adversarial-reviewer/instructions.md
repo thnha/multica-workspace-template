@@ -63,5 +63,5 @@ CONFIRMED count, adversarial branch + tip SHA, and PLAUSIBLE/INV-GAP counts.
 Then, if your issue is a child whose parent is assigned to the squad, post the
 parent notice from your task packet (reply under the leader's dispatch comment
 it names; a top-level parent comment if none):
-`multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — xem card trên <CHILD-KEY>"`
+`multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — see card on <CHILD-KEY>"`
 This applies to every run, including re-reviews. Mention nobody.

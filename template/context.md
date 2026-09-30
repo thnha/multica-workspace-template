@@ -2,7 +2,7 @@
 Apply to every issue in every project unless the issue description or the project description explicitly overrides them.
 
 - R1 Adversarial only when needed: dispatch Adversarial Reviewer only for packages that change production code touching shared/persisted state, auth/account, sync, data migrations, or declared invariants. Test/tooling/docs-only packages need Code Review only.
-- R2 Correction limit: max rounds per package = issue property `Max rounds` (default 3). Handoff corrections and review repairs count toward the same limit. At the limit: stop, write "Cần bạn quyết: CÓ" and ask the requester. Never open an extra round on your own.
+- R2 Correction limit: max rounds per package = issue property `Max rounds` (default 3). Handoff corrections and review repairs count toward the same limit. At the limit: stop, write "Decision needed: YES" and ask the requester. Never open an extra round on your own.
 - R3 Acceptance frozen at dispatch: no new requirements on a running package. New requirements become follow-ups, unless a CONFIRMED defect breaks an invariant.
 - R4 CI is the primary evidence: format/lint/typecheck/test gates read GitHub checks on the exact head SHA. Never write "CI running" when the PR has no checks.
 
@@ -24,15 +24,21 @@ Applies to every agent in every project whenever you need a decision or clarific
 
 1. Propose first. Start with the concrete result you would deliver if the answer is `ok` (e.g. a target tree, a short list of changes, a mock), max ~20 lines.
 2. At most 3 questions per round. Ask only what has no safe default: destructive actions, large-impact choices, or pure preferences you cannot infer. One line per question; options A/B/C one line each; mark your recommendation with ★.
-3. Everything else goes under "Mặc định sẽ áp dụng" as D1, D2, … (one line each). The requester only objects if they disagree.
-4. End with the reply syntax: `ok` = accept all ★ and all defaults; `ok, 1A, bỏ D3` = overrides. Free text is also accepted.
+3. Everything else goes under "Defaults to apply" as D1, D2, … (one line each). The requester only objects if they disagree.
+4. End with the reply syntax: `ok` = accept all ★ and all defaults; `ok, 1A, drop D3` = overrides. Free text and replies in the requester's own language are also accepted.
 5. Ask a follow-up round only if the answers create new questions. Never repeat already-answered questions.
 6. Keep evidence and long analysis out of the question comment; attach or link it.
 
 Template:
-**Nếu bạn trả lời `ok`, mình sẽ làm:** <proposal>
-**Cần bạn chọn:**
+**If you reply `ok`, I will:** <proposal>
+**Please choose:**
 1. <question> — A. … · ★B. … · C. …
-**Mặc định sẽ áp dụng** (chỉ cần phản đối nếu không muốn):
+**Defaults to apply** (object only if you disagree):
 - D1: …
-**Trả lời:** `ok` hoặc `ok, 1A, bỏ D1`
+**Reply:** `ok` or `ok, 1A, drop D1`
+
+## Output language
+- Everything that configures agents (instructions, skills, task packets, wakeup instructions) is written in English.
+- Protocol tokens stay in English exactly as written: status tokens, card headers and field labels (`Decision needed: YES|NO`, `Result`, `Key points`, `Not verified`, `Needed from you`, `Next`), `[Watchdog]`, the clarification-template labels, option letters, and property values.
+- Free text written for the human requester is Vietnamese: card field values, questions and options, proposals, explanations, and notices addressed to the requester.
+- Text addressed to other agents (task packets, parent notices, resume notes), code, commits, and PR titles/bodies is English. Artifact IDs, requirement IDs, and commit SHAs are never translated.

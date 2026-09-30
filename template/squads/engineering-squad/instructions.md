@@ -103,10 +103,10 @@ approval, or merge-to-main gates.
 - Mode
   - "Clarify": Feature Analyst only. Read the request and the relevant
     code/docs; post open questions, assumptions, ambiguities, and a draft of
-    scope / non-goals / acceptance criteria. Stop with "Cần bạn quyết: CÓ".
+    scope / non-goals / acceptance criteria. Stop with "Decision needed: YES".
     No spec revision loop, no design, no code, no sub-issues.
-    The Clarify card always ends with one extra question "Sau khi chốt, chạy
-    tiếp: ★A. Plan + Implement · B. Plan only · C. Dừng ở đây". When the
+    The Clarify card always ends with one extra question "After confirming,
+    continue with: ★A. Plan + Implement · B. Plan only · C. Stop here". When the
     requester answers (plain `ok` = the ★ option), the leader sets the Mode
     property to that value (`multica issue property set`) and continues in the
     same run. Never ask a separate "which mode next?" question.
@@ -115,7 +115,7 @@ approval, or merge-to-main gates.
     file-level evidence and recommendations. Stop in_review. No plan, no code,
     no sub-issues.
   - "Plan only": analysis → design → plan only. Stop at PLAN_PASSED, set the
-    parent in_review with "Cần bạn quyết: CÓ". No code changes, no
+    parent in_review with "Decision needed: YES". No code changes, no
     implementation sub-issues.
   - "Plan + Implement": full route, but stop for requester approval after
     PLAN_PASSED before creating implementation children.
@@ -141,8 +141,8 @@ approval, or merge-to-main gates.
     artifacts from earlier modes; do not redo completed phases unless asked.
     Changing a property does not wake the leader; the requester comments to
     resume.
-- QA: "Skip" → no QA dispatch. "Cuối milestone" → one QA per milestone on the
-  integration head, none per package. "Từng package" → QA per package.
+- QA: "Skip" → no QA dispatch. "Per milestone" → one QA per milestone on the
+  integration head, none per package. "Per package" → QA per package.
   Empty → route default.
 - Max rounds: correction limit per package (R2). Empty → 3.
 
@@ -165,17 +165,36 @@ Record no_action only when the next step waits on a named external decision.
 
 Quota guard and stall check (Workflow Watchdog)
 
-Quota handling and stall detection belong to the agent `Workflow Watchdog`
-(id {{@agent:Workflow Watchdog}}, Codex runtime), never to the leader:
-a leader that hit its own quota cannot schedule its own resume. When you start
-leading an issue, register once each on the parent (skip if
-`multica issue wakeup list <issue>` already shows it); whenever you create a
-sub-issue, register only the task.failed one on it:
-`multica issue wakeup create <issue> --kind event --event task.failed --mode continuous --agent-id {{@agent:Workflow Watchdog}} --instruction "Quota guard (job 1 in your instructions)."`
-`multica issue wakeup create <issue> --kind every --every 1h --agent-id {{@agent:Workflow Watchdog}} --instruction "Stall check (job 2 in your instructions)."`
+Quota handling, failed-run recovery and stall detection belong to the agent
+`Workflow Watchdog` (id {{@agent:Workflow Watchdog}}, Codex runtime),
+never to the leader: a leader that hit its own quota cannot schedule its own
+resume. When you start leading an issue, register once each on the parent (skip
+if `multica issue wakeup list <issue>` already shows it enabled); whenever you
+create a sub-issue, register only the task.failed one on it:
+`multica issue wakeup create <issue> --kind event --event task.failed --mode continuous --max-fires 200 --agent-id {{@agent:Workflow Watchdog}} --instruction "Quota guard (job 1 in your instructions)."`
+`multica issue wakeup create <issue> --kind every --every 1h --expires-in 336h --agent-id {{@agent:Workflow Watchdog}} --instruction "Stall check (job 2 in your instructions)."`
 Never register a task.failed wakeup that targets the leader. Do not react to
-quota/session-limit failures yourself and do not restate them as comments;
-the watchdog schedules the resume. Disable both wakeups when the issue is done.
+quota/session-limit or transient run failures yourself and do not restate them
+as comments; the watchdog schedules the resume. Closing or cancelling an issue
+disables its wakeups automatically. A scheduled watchdog audit re-registers any
+of these that are missing or paused, so a missed registration is recovered, but
+still register them yourself so coverage starts immediately.
+
+Waiting on an external fact (condition wakeups)
+
+Never end a leader run waiting on something without arranging who wakes you.
+Before ending a run whose next step depends on a fact the platform can check,
+register one condition wakeup that targets yourself (skip if an equivalent
+enabled one already exists in `multica issue wakeup list <issue>`):
+- CI result on a linked PR: `--until-pr checks`
+- PR merge: `--until-pr merged`
+- another issue: `--until-issue <issue-id> --until-issue-state done|ended|in_review`
+Form: `multica issue wakeup create <issue> --until-pr checks --expires-in 24h --on-timeout wake --agent-id <your agent id> --instruction "<exact next step to take when this holds>"`
+Register it on the issue that owns the fact (the child that carries the PR, or
+the parent for cross-issue waits), with `--parent <comment-id>` when the result
+belongs in an existing thread. Sub-issue and stage completion already wake you
+through the platform stage wake; do not add a wakeup for that. Waiting on the
+requester ("Decision needed: YES") needs no wakeup: their comment wakes you.
 
 Mode source of truth and property wakeups
 

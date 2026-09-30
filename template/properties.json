@@ -46,11 +46,11 @@
         "color": "#22c55e"
       },
       {
-        "name": "Cuối milestone",
+        "name": "Per milestone",
         "color": "#ef4444"
       },
       {
-        "name": "Từng package",
+        "name": "Per package",
         "color": "#f97316"
       }
     ]

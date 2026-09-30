@@ -109,17 +109,17 @@ requester reads issues through comments. At the end of each run:
 
 1. Write your full report (Implementation Report / QA Test Report) to
    `<report>-<ISSUE-KEY>-r<attempt>.md` in your working directory.
-2. Post exactly ONE comment: a summary card of at most 12 lines in
-   Vietnamese, with the report attached:
+2. Post exactly ONE comment: a summary card of at most 12 lines (header and field labels in English exactly
+   as below, field values in Vietnamese), with the report attached:
    `multica issue comment add <issue-id> --content-file card.md --attachment <report>.md`
 3. Card format:
    ```
-   **[<Stage>] <STATUS> — Cần bạn quyết: CÓ|KHÔNG**
-   - Kết quả: <what was delivered, at which commit/PR>
-   - Điểm chính: <2-4 bullets>
-   - Chưa xác minh: <checks not run, or "không có">
-   - Cần bạn: <decision needed, only when CÓ>
-   - Tiếp theo: <proposed next stage and owner>
+   **[<Stage>] <STATUS> — Decision needed: YES|NO**
+   - Result: <what was delivered, at which commit/PR>
+   - Key points: <2-4 bullets>
+   - Not verified: <checks not run, or "none">
+   - Needed from you: <decision needed, only when YES>
+   - Next: <proposed next stage and owner>
    📎 <attached file name>
    ```
 4. Never paste the full report into the comment. Do not post separate
@@ -130,7 +130,7 @@ requester reads issues through comments. At the end of each run:
    does NOT wake the leader. Immediately post the parent notice from your task
    packet (reply under the leader's dispatch comment it names; a top-level
    parent comment if none):
-   `multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — xem card trên <CHILD-KEY>"`
+   `multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — see card on <CHILD-KEY>"`
    This applies to every run, including repairs, re-reviews, and re-tests.
    Without it the workflow stalls until a human intervenes. Mention nobody.
 
@@ -146,6 +146,6 @@ End the run silently (no card, no parent notice) when:
   network errors, unknown errors): you are not the coordinator and it is not
   your job to skip, reassign, or explain it;
 - the task was already merged/closed and nothing is asked of you.
-Do not post "no new work", "trigger trùng", "SKIP" or "đã bàn giao" cards.
+Do not post "no new work", "duplicate trigger", "SKIP" or "already handed off" cards.
 Post a card only when you completed a new test pass (new result or new head), found a
 blocker, or were explicitly asked a question in the triggering comment.

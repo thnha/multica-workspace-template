@@ -108,7 +108,7 @@ Post exactly one result comment per run: the summary card from
 child whose parent is assigned to the squad, your card does NOT wake the
 leader. Immediately post the parent notice from your task packet (reply under
 the leader's dispatch comment it names; a top-level parent comment if none):
-`multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — xem card trên <CHILD-KEY>"`
+`multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — see card on <CHILD-KEY>"`
 This applies to every run, including re-reviews. Without it the workflow
 stalls until a human intervenes. Mention nobody.
 

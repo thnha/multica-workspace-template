@@ -2,7 +2,9 @@
   "name": "lingo-bites",
   "description": "",
   "issue_prefix": "LING",
-  "settings": {},
+  "settings": {
+    "pr_merge_status": "in_review"
+  },
   "repos": [
     {
       "url": "git@github.com:thnha/LingoBites-App.git",

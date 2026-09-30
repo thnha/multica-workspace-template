@@ -133,7 +133,7 @@ After posting the card, you MUST post exactly one short notice on the PARENT
 as a reply to the leader's dispatch comment named in your task packet (a
 top-level parent comment if the packet names none), on every run including
 repairs, re-reviews, and re-tests:
-`multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — xem card trên <CHILD-KEY>"`.
+`multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — see card on <CHILD-KEY>"`.
 Skipping it stalls the workflow until a human intervenes. Do not mention anyone in it; a comment on the squad-assigned
 parent already wakes the leader. This notice is part of the handoff, not an
 extra comment. Do not set the child to done yourself; the leader closes it
@@ -151,16 +151,17 @@ long logs) as a Markdown file on the result comment:
 Name it `<artifact>-<ISSUE-KEY>-r<attempt>.md` and keep both files inside your
 working directory. The file follows the role's canonical template unchanged.
 
-The card is at most 12 lines and about 1,200 characters, written in the
+The card is at most 12 lines and about 1,200 characters. The header and field
+labels stay in English exactly as below; the values are written in the
 requesting user's language (Vietnamese in this workspace):
 
 ```
-**[<Stage>] <STATUS> — Cần bạn quyết: CÓ|KHÔNG**
-- Kết quả: <one line: what was delivered, at which revision>
-- Điểm chính: <2-4 bullets: key decisions, findings, or failures with IDs>
-- Chưa xác minh: <checks not run, or "không có">
-- Cần bạn: <the decision needed, only when CÓ>
-- Tiếp theo: <proposed next stage and owner>
+**[<Stage>] <STATUS> — Decision needed: YES|NO**
+- Result: <one line: what was delivered, at which revision>
+- Key points: <2-4 bullets: key decisions, findings, or failures with IDs>
+- Not verified: <checks not run, or "none">
+- Needed from you: <the decision needed, only when YES>
+- Next: <proposed next stage and owner>
 📎 <attached file name(s)>
 ```
 

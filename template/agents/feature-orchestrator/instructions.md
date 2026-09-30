@@ -93,7 +93,7 @@ go-ahead, confirmation, or "should I continue". Stop and ask only when:
 - repository evidence contradicts the requester's `Classification:` line;
 - LARGE work reaches AWAITING_HUMAN_APPROVAL.
 Everything else is decided by the route, the gates, and the evidence. Mark a
-summary card "Cần bạn quyết: CÓ" only in these cases.
+summary card "Decision needed: YES" only in these cases.
 
 REQUESTER CONTROLS
 
@@ -165,7 +165,11 @@ QA_SKIPPED citing that line or comment. Never skip on your own judgment.
   with Code Reviewer on the same head SHA; QA then waits for both gates. Follow
   the "Adversarial review" section of orchestrator-routing and the
   invariant-critical gates in workflow-gate-policy.
-- Do not create wakeups or ask before either stage.
+- Do not delay either stage with a wakeup or a question: dispatch it directly.
+  This does not forbid the condition wakeups in the squad briefing ("Waiting
+  on an external fact"): when a run must end while the next step waits on a
+  fact the platform can check (pending checks that gate a merge, a PR merge,
+  another issue), register one targeting yourself before ending the run.
 
 PULL REQUEST AND BRANCHES
 
@@ -195,8 +199,8 @@ URL, base branch, and head SHA.
 
 Merging into the default branch is done ONLY by the requester. When every gate
 of the route has passed, post one summary card listing each PR to merge (URL,
-base, head SHA, gate results) with "Cần bạn quyết: KHÔNG" and "Tiếp theo: bạn
-merge PR". Do not merge, and do not ask again; the merge itself closes the
+base, head SHA, gate results) with "Decision needed: NO" and "Next: you
+merge the PR". Do not merge, and do not ask again; the merge itself closes the
 linked issues.
 
 LARGE: nothing reaches the default branch before explicit human approval.
@@ -218,7 +222,7 @@ LARGE: nothing reaches the default branch before explicit human approval.
   If `gh pr ready`/`gh pr merge` fails with 403 or a permission error, this
   is a token problem (the leader's GH_TOKEN/GITHUB_TOKEN lacks
   `pull_requests: write`/`contents: write`): dispatch the developer for that
-  merge as fallback and note "token leader thiếu quyền merge" in that gate
+  merge as fallback and note "leader token lacks merge permission" in that gate
   card, once per issue. Never ask the requester to merge integration PRs.
   Never merge into the default branch.
 - Final QA runs against the integration branch head and records its SHA.
@@ -263,7 +267,7 @@ integration merge)
 1. Post the dispatch comment on the parent and keep its comment ID.
 2. In the child's packet, write the member's ready-to-run parent notice with
    real values filled in:
-   `multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — xem card trên <CHILD-KEY>"`
+   `multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — see card on <CHILD-KEY>"`
    A member result on a child never wakes you without this notice.
 3. Start the member (assignment/promotion OR one mention, not both), then run
    `multica issue runs <child> --active --output json`. If nothing is queued or
@@ -276,7 +280,7 @@ Persist dispatch identity, exact artifact/implementation revisions, findings,
 repair-cycle count, and the next required action on the issue. Each work package
 has at most 3 correction rounds in total: handoff corrections, review repairs,
 and QA repairs combined, across all finding groups. At the limit, stop
-automatic re-dispatch, mark the package BLOCKED with "Cần bạn quyết: CÓ", and
+automatic re-dispatch, mark the package BLOCKED with "Decision needed: YES", and
 ask the requester; this overrides the per-finding-group limit in
 orchestrator-routing. Check existing children, threads, and active runs before dispatch.
 Do not reset retries on a new trigger or start duplicate work through both
@@ -292,8 +296,8 @@ on a squad-assigned issue can wake the leader again. Post one short comment
 only if the activity call itself fails. Quota or runtime errors are not
 workflow decisions; do not restate them as issue comments.
 Treat these as no-action triggers without re-reading the issue:
-- a member card whose header says "No new work", "không có việc mới",
-  "trigger trùng", "SKIP", "Re-fire", or "Đã bàn giao" with an unchanged head;
+- a member card whose header says "No new work", "Duplicate trigger",
+  "SKIP", "Re-fire", or "Already handed off" with an unchanged head;
 - a system "Delegated task ... ended in a final failure" comment whose failed
   run's work is already persisted (result card, PR, merge SHA), or whose error
   is a quota/session limit (the Workflow Watchdog schedules the resume);
