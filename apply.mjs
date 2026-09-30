@@ -8,6 +8,8 @@
 //   --template <dir>            template folder (default ./template)
 //   --secrets <file>            JSON like secrets.example.json with real custom_env / mcp_config values
 //   --runtime <provider>=<id>   pin the runtime for a provider (repeatable), e.g. --runtime claude=<runtime-id>
+//   --fallback-runtime <id>     runtime for agents whose provider has no runtime in the target
+//                               (default: a runtime of the template's most common provider, else any online one)
 //   --machine <text>            prefer runtimes whose name contains <text> (e.g. NhaTran-PC)
 //   --with-repos                also add workspace repos and project repo resources
 //   --activate-autopilots       leave autopilots active (default: paused)
@@ -157,25 +159,40 @@ log(`Skills: ${newSkills} created, ${tSkills.length - newSkills} already present
 // ---- runtimes -------------------------------------------------------------------------
 const runtimes = asList(read(["runtime", "list"]));
 const pinned = new Map([].concat(args.runtime || []).map(s => s.split("=")));
+const byMachine = list => {
+  if (!args.machine) return list;
+  const m = list.filter(r => (r.name || "").includes(args.machine));
+  return m.length ? m : list;
+};
+const providerCount = {};
+for (const a of tAgents) providerCount[a.runtime_provider] = (providerCount[a.runtime_provider] || 0) + 1;
+const mainProvider = Object.entries(providerCount).sort((x, y) => y[1] - x[1])[0]?.[0];
+// Returns { id, exact }. exact=false means the template's provider has no runtime here and the agent
+// lands on a fallback runtime; the runtime can be changed by hand afterwards.
 function pickRuntime(agent) {
   const p = agent.runtime_provider;
-  if (pinned.has(p)) return pinned.get(p);
-  let c = runtimes.filter(r => r.provider === p);
-  if (args.machine) { const m = c.filter(r => (r.name || "").includes(args.machine)); if (m.length) c = m; }
-  const hint = c.find(r => r.name === agent.runtime_name_hint);
-  return (hint || c.find(r => r.status === "online") || c[0])?.id;
+  if (pinned.has(p)) return { id: pinned.get(p), exact: true };
+  const c = byMachine(runtimes.filter(r => r.provider === p));
+  const hit = c.find(r => r.name === agent.runtime_name_hint) || c.find(r => r.status === "online") || c[0];
+  if (hit) return { id: hit.id, exact: true };
+  if (args["fallback-runtime"]) return { id: args["fallback-runtime"], exact: false };
+  // Prefer the provider most agents in the template use, then anything online.
+  const any = byMachine(runtimes);
+  const fb = any.find(r => r.provider === mainProvider && r.status === "online") || any.find(r => r.provider === mainProvider)
+    || any.find(r => r.status === "online") || any[0];
+  return fb ? { id: fb.id, exact: false, name: fb.name } : { id: undefined, exact: false };
 }
-const missingProviders = [...new Set(tAgents.filter(a => !pickRuntime(a)).map(a => a.runtime_provider))];
-if (missingProviders.length && !dryRun) {
-  writeJson(path.resolve(`apply-report-${wsId}.json`), { workspace_id: wsId, stopped_at: "runtimes", missing_providers: missingProviders });
-  log(`\nStopped before agents: no runtime for provider(s) ${missingProviders.join(", ")} in workspace ${wsId}.`);
-  log("Connect a daemon to this workspace (run `multica setup` / `multica login` on the machine, then restart the daemon),");
+if (!runtimes.length && !pinned.size && !args["fallback-runtime"] && !dryRun && tAgents.some(a => !haveAgentNames().has(a.name))) {
+  writeJson(path.resolve(`apply-report-${wsId}.json`), { workspace_id: wsId, stopped_at: "runtimes" });
+  log(`\nStopped before agents: workspace ${wsId} has no runtime at all (an agent cannot be created without one).`);
+  log("Connect a daemon to this workspace (run `multica setup` / `multica login` on the machine, then `multica daemon restart`),");
   log(`check with: multica runtime list --workspace-id ${wsId}`);
-  log(`then re-run: node apply.mjs --workspace-id ${wsId} ${process.argv.slice(2).filter(a => !["--name", "--slug", "--prefix"].includes(a)).join(" ")}`);
-  log("(or pin one explicitly with --runtime <provider>=<runtime-id>)");
+  log(`then re-run: node apply.mjs --workspace-id ${wsId}`);
   process.exit(2);
 }
-if (missingProviders.length) log(`[dry-run] note: no runtime yet for ${missingProviders.join(", ")} (a new workspace has none until a daemon joins)`);
+function haveAgentNames() { return new Set(asList(read(["agent", "list"])).map(a => a.name)); }
+if (!runtimes.length && dryRun) log("[dry-run] note: no runtime yet (a new workspace has none until a daemon joins)");
+const runtimeFallbacks = [];
 
 // ---- agents -----------------------------------------------------------------------------
 const haveAgents = new Map(asList(read(["agent", "list"])).map(a => [a.name, a.id]));
@@ -189,14 +206,19 @@ for (const a of tAgents) {
   if (instr.text.length > 30000) warnings.push(`agent ${a.name}: instructions are ${instr.text.length} chars; Windows command lines cap near 32k`);
   const sec = secrets.agents?.[a.name] || {};
   const members = (a.public_to_members || []).map(e => ids.member.get(e)).filter(Boolean);
-  const r = mut(["agent", "create", "--name", a.name, "--runtime-id", pickRuntime(a) || "<runtime>",
+  const rt = pickRuntime(a);
+  // Model, thinking level, service tier, custom args and runtime config are provider-specific:
+  // on a fallback runtime use its defaults and leave the original values in the follow-up list.
+  if (!rt.exact) runtimeFallbacks.push(`${a.name} (template: ${a.runtime_provider} / ${a.model || "default"})`);
+  const own = rt.exact ? a : {};
+  const r = mut(["agent", "create", "--name", a.name, "--runtime-id", rt.id || "<runtime>",
     "--description", a.description || "", "--instructions", instr.text,
-    "--model", a.model || "",
-    ...(a.thinking_level ? ["--thinking-level", a.thinking_level] : []),
-    ...(a.service_tier ? ["--service-tier", a.service_tier] : []),
+    "--model", own.model || "",
+    ...(own.thinking_level ? ["--thinking-level", own.thinking_level] : []),
+    ...(own.service_tier ? ["--service-tier", own.service_tier] : []),
     "--max-concurrent-tasks", String(a.max_concurrent_tasks || 6),
-    ...((a.custom_args || []).length ? ["--custom-args", JSON.stringify(a.custom_args)] : []),
-    ...(a.runtime_config && Object.keys(a.runtime_config).length ? ["--runtime-config", JSON.stringify(a.runtime_config)] : []),
+    ...((own.custom_args || []).length ? ["--custom-args", JSON.stringify(own.custom_args)] : []),
+    ...(own.runtime_config && Object.keys(own.runtime_config).length ? ["--runtime-config", JSON.stringify(own.runtime_config)] : []),
     ...((a.conversation_starters || []).length ? ["--conversation-starters", resolve(JSON.stringify(a.conversation_starters)).text] : []),
     "--permission-mode", a.permission_mode || "private",
     ...(a.public_to_workspace ? ["--public-to-workspace"] : []),
@@ -215,6 +237,7 @@ for (const a of tAgents) {
   if (a.needs_mcp_config && !sec.mcp_config) todo.push(`Agent "${a.name}": set its MCP config`);
   if (a.avatar) avatars.push(`${a.name} ${a.avatar.replace(/^emoji:/, "")}`);
 }
+if (runtimeFallbacks.length) todo.push(`No runtime of the template's provider; created on a fallback runtime with its default model, set runtime/model by hand: ${runtimeFallbacks.join(", ")}`);
 if (avatars.length) todo.push(`Agent avatars are not settable from the CLI; set them in the UI: ${avatars.join(", ")}`);
 log(`Agents: ${newAgents} created, ${tAgents.length - newAgents} already present`);
 

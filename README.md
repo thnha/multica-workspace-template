@@ -28,6 +28,7 @@ Chạy lại bao nhiêu lần cũng được: thứ gì đã tồn tại (so the
 |---|---|
 | `--secrets secrets.json` | Điền env/MCP thật cho agent. Copy từ `secrets.example.json`. File này đã nằm trong `.gitignore` |
 | `--runtime claude=<runtime-id>` | Chỉ định runtime cho từng provider (dùng được nhiều lần) |
+| `--fallback-runtime <runtime-id>` | Runtime cho agent mà workspace mới không có runtime cùng loại |
 | `--machine NhaTran-PC` | Ưu tiên runtime của máy có tên chứa chuỗi này |
 | `--with-repos` | Thêm repo vào workspace và gắn repo vào project |
 | `--activate-autopilots` | Để autopilot chạy luôn (mặc định là paused) |
@@ -35,7 +36,9 @@ Chạy lại bao nhiêu lần cũng được: thứ gì đã tồn tại (so the
 
 Sau khi chạy xong, script in danh sách **việc cần làm tay** và ghi file `apply-report-<workspace-id>.json` (bảng tên → ID mới).
 
-Agent được gán runtime theo provider (`claude`, `opencode`, `codex`). Nếu có nhiều runtime cùng provider, script ưu tiên runtime trùng tên máy gốc, sau đó đến runtime đang online.
+Agent được gán runtime theo provider (`claude`, `opencode`, `codex`, `muse`…). Nếu có nhiều runtime cùng provider, script ưu tiên runtime trùng tên máy gốc, sau đó đến runtime đang online.
+
+Nếu workspace mới **không có runtime cùng provider**, agent vẫn được tạo trên runtime fallback (mặc định là runtime thuộc provider được dùng nhiều nhất trong template, ví dụ Claude) và dùng model mặc định của runtime đó. Script liệt kê các agent này trong phần việc cần làm tay để bạn đổi runtime/model lại. Script chỉ dừng khi workspace chưa có runtime nào.
 
 ## Cập nhật template khi config thật thay đổi
 
