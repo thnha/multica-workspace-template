@@ -1,5 +1,7 @@
 ## Multica workspace template
 
+Hướng dẫn từng bước (tiếng Việt): [docs/HUONG-DAN.md](docs/HUONG-DAN.md).
+
 Template cấu hình workspace Multica (context, skills, agents, squad, properties, labels, projects, autopilot), export từ workspace `lingo-bites`. Dùng để tạo workspace mới có sẵn toàn bộ setup.
 
 Yêu cầu: Node ≥ 18 và `multica` CLI đã `multica login` bằng tài khoản của bạn. Không cần cài thêm package nào.
@@ -45,7 +47,7 @@ Nếu workspace mới **không có runtime cùng provider**, agent vẫn đượ
 ```bash
 node export.mjs                      # export từ workspace mặc định của CLI
 node export.mjs --workspace-id <id>  # hoặc chỉ định workspace
-git diff && git commit -am "Update template" && git push
+git diff && git add -A && git commit -m "Update template" && git push
 ```
 
 ID nằm trong text (instructions, prompt, context) được đổi thành placeholder khi export và resolve lại khi apply:

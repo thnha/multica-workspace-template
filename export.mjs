@@ -62,7 +62,6 @@ writeJson(path.join(outDir, "workspace.json"), {
   repos: (ws.repos || []).map(r => ({ url: r.url, description: r.description || "" })),
   // user ids are global across workspaces; used to resolve {{@member:<email>}} when that person is not yet a member.
   members: Object.fromEntries(members.map(m => [m.email, m.user_id])),
-  exported_at: new Date().toISOString(),
 });
 writeText(path.join(outDir, "context.md"), portable(ws.context, "workspace.context"));
 
