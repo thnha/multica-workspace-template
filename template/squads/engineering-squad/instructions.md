@@ -29,6 +29,18 @@ Reuse existing children for review/QA repairs and re-checks per the leader's
 REPAIR CYCLES rule; do not create a new issue for each repair cycle. Create linked standalone issues for out-of-scope work
 with its own lifecycle, while recording any dependency on the parent.
 
+Size packages by risk, not by module. Every package costs a full
+developer → CI → review → merge cycle (about 15-25 minutes), so:
+- Mechanical changes with unchanged runtime behavior (pure moves, renames,
+  import rewrites, formatting) go into as few packages as possible, normally
+  one code package per repository, keeping per-module commits inside it for
+  reviewability.
+- Split only where risk, review focus, or ownership differs (behavior
+  changes, persisted/shared state, invariants, different repositories).
+- A docs-only package whose target paths are already fixed by the approved
+  design does not wait for the code packages: dispatch it in parallel and
+  merge it last.
+
 For phased children, use stages as barrier groups and leave later dependent
 work in backlog. A stage completion notification is a signal to inspect results,
 not proof of acceptance: cancelled children do not establish successful delivery.
@@ -93,6 +105,11 @@ approval, or merge-to-main gates.
     code/docs; post open questions, assumptions, ambiguities, and a draft of
     scope / non-goals / acceptance criteria. Stop with "Cần bạn quyết: CÓ".
     No spec revision loop, no design, no code, no sub-issues.
+    The Clarify card always ends with one extra question "Sau khi chốt, chạy
+    tiếp: ★A. Plan + Implement · B. Plan only · C. Dừng ở đây". When the
+    requester answers (plain `ok` = the ★ option), the leader sets the Mode
+    property to that value (`multica issue property set`) and continues in the
+    same run. Never ask a separate "which mode next?" question.
   - "Analysis": Analyst and/or Architect investigate the current state
     (architecture, root cause, options) and deliver a findings report with
     file-level evidence and recommendations. Stop in_review. No plan, no code,
@@ -146,23 +163,19 @@ After a child merges or a stage completes, if nothing is running in the parent
 family and a dependency-ready next package exists, dispatch it in the same run.
 Record no_action only when the next step waits on a named external decision.
 
-Quota guard
+Quota guard and stall check (Workflow Watchdog)
 
-When you start leading an issue, and whenever you create a sub-issue, register
-once (skip if `multica issue wakeup list <issue>` already shows it):
-`multica issue wakeup create <issue> --kind event --event task.failed --mode continuous --agent-id <your agent id> --instruction "<quota guard steps below>"`
-
-When a quota-guard wakeup fires:
-1. Read the latest failed run's error (`multica issue runs <issue> --output json`).
-   Not a quota/session/rate limit → handle it through the normal gates.
-2. Quota limit → if the issue already has an active run or a pending `at` wakeup
-   for that agent, do nothing. Otherwise take the reset time from the error
-   (e.g. "resets 12:30pm (Asia/Saigon)"), convert to UTC, add 5 minutes (no
-   reset time → now + 1h), and create exactly one
-   `multica issue wakeup create <issue> --kind at --at <UTC> --agent-id <failed run's agent> --instruction "Quota đã reset. Đọc lại comment gần nhất và tiếp tục từ chỗ dừng; không làm lại bước đã xong."`
-3. Post one line on the issue: which agent hit the limit and when it resumes
-   (Vietnam time).
-Disable the continuous wakeup when the issue is done.
+Quota handling and stall detection belong to the agent `Workflow Watchdog`
+(id {{@agent:Workflow Watchdog}}, Codex runtime), never to the leader:
+a leader that hit its own quota cannot schedule its own resume. When you start
+leading an issue, register once each on the parent (skip if
+`multica issue wakeup list <issue>` already shows it); whenever you create a
+sub-issue, register only the task.failed one on it:
+`multica issue wakeup create <issue> --kind event --event task.failed --mode continuous --agent-id {{@agent:Workflow Watchdog}} --instruction "Quota guard (job 1 in your instructions)."`
+`multica issue wakeup create <issue> --kind every --every 1h --agent-id {{@agent:Workflow Watchdog}} --instruction "Stall check (job 2 in your instructions)."`
+Never register a task.failed wakeup that targets the leader. Do not react to
+quota/session-limit failures yourself and do not restate them as comments;
+the watchdog schedules the resume. Disable both wakeups when the issue is done.
 
 Mode source of truth and property wakeups
 
@@ -170,7 +183,7 @@ The `Mode` property is the ONLY source for the current mode. Never infer it
 from issue descriptions, packets, or earlier comments, and never write a mode
 value into descriptions or packets (link the property instead). Only the
 values listed above exist; "Analysis/Plan only" is not a mode.
-When you register the quota guard, also register once:
+When you register the watchdog wakeups, also register once (this one targets the leader):
 `multica issue wakeup create <issue> --kind event --event issue.properties_changed --mode continuous --agent-id <your agent id> --instruction "Requester changed issue properties. Re-read them with multica issue property list and act on the current Mode/QA/Max rounds."`
 In "Plan + Implement", a requester switching Mode to "Plan + Implement" or
 "Implement" after PLAN_PASSED counts as plan approval: dispatch implementation.

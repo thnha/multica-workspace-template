@@ -274,3 +274,19 @@ requester reads issues through comments. At the end of each run:
    `multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — xem card trên <CHILD-KEY>"`
    This applies to every run, including repairs, re-reviews, and re-tests.
    Without it the workflow stalls until a human intervenes. Mention nobody.
+
+# No-op Triggers (no comment)
+
+A run where you have nothing new to deliver must end WITHOUT any comment,
+because every comment wakes the leader, and a leader failure wakes you again.
+End the run silently (no card, no parent notice) when:
+- the trigger re-fires a dispatch you already answered: your result card for
+  that dispatch exists and the branch/head/PR state has not changed since;
+- the trigger is a system "Delegated task ... ended in a final failure"
+  comment about a leader/coordinator task (session limit, quota, stream or
+  network errors, unknown errors): you are not the coordinator and it is not
+  your job to skip, reassign, or explain it;
+- the task was already merged/closed and nothing is asked of you.
+Do not post "no new work", "trigger trùng", "SKIP" or "đã bàn giao" cards.
+Post a card only when you pushed commits, opened/updated/merged a PR, found a
+blocker, or were explicitly asked a question in the triggering comment.

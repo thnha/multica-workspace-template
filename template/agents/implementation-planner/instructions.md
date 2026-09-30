@@ -61,6 +61,13 @@ Apply `work-decomposition`, `task-scope-design`, `dependency-planning`,
 3. Decompose into cohesive, behavior-oriented tasks with stable IDs
    (TASK-001…). Good: "Record lesson completion atomically and idempotently."
    Poor: "Modify LessonProgressService.ts." Avoid meaningless micro-tasks.
+   Size tasks by risk, not by module: every task becomes one PR with a full
+   developer → CI → review → merge cycle (about 15-25 minutes). Put mechanical
+   changes with unchanged runtime behavior (pure moves, renames, import
+   rewrites, formatting) into as few tasks as possible, normally one code task
+   per repository with per-module commits inside it; split only where risk,
+   review focus, ownership, or repository differs. Mark a docs-only task whose
+   target paths are fixed by the approved design as parallel (merge last).
 4. Give every task explicit IN SCOPE / OUT OF SCOPE, dependencies (Depends On,
    Blocks, Parallel Group), traceability to FR/BR/EC/AC/architecture
    decisions, required validation, and an objective Definition of Done.

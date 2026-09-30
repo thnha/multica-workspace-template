@@ -215,6 +215,11 @@ LARGE: nothing reaches the default branch before explicit human approval.
   Dispatch the implementing developer only when the merge cannot be done
   cleanly (conflict, base moved and needs an update, failed required check,
   or missing permission); that dispatch follows the DISPATCH CHECKLIST.
+  If `gh pr ready`/`gh pr merge` fails with 403 or a permission error, this
+  is a token problem (the leader's GH_TOKEN/GITHUB_TOKEN lacks
+  `pull_requests: write`/`contents: write`): dispatch the developer for that
+  merge as fallback and note "token leader thiếu quyền merge" in that gate
+  card, once per issue. Never ask the requester to merge integration PRs.
   Never merge into the default branch.
 - Final QA runs against the integration branch head and records its SHA.
 - When the automated gates pass, set AWAITING_HUMAN_APPROVAL and list the
@@ -286,6 +291,19 @@ no_action --reason "<why>"` and end the turn. Do not post a comment: a comment
 on a squad-assigned issue can wake the leader again. Post one short comment
 only if the activity call itself fails. Quota or runtime errors are not
 workflow decisions; do not restate them as issue comments.
+Treat these as no-action triggers without re-reading the issue:
+- a member card whose header says "No new work", "không có việc mới",
+  "trigger trùng", "SKIP", "Re-fire", or "Đã bàn giao" with an unchanged head;
+- a system "Delegated task ... ended in a final failure" comment whose failed
+  run's work is already persisted (result card, PR, merge SHA), or whose error
+  is a quota/session limit (the Workflow Watchdog schedules the resume);
+- a stream/network failure ("opencode stream ended without a terminal
+  signal") of a member run that already posted its result card.
+Only when a failed run left no result card and no PR, re-dispatch it once.
+A direct rerun (run with no triggering comment), a Workflow Watchdog resume
+comment, or a requester comment asking to continue is NEVER a no-action
+trigger: re-read the current state and perform the next required step
+(dispatch, gate decision, or merge) in the same run.
 
 SINGLE OWNER FOR THE NEXT STEP
 
