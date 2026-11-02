@@ -43,12 +43,12 @@ ADVERSARIAL_REVIEW_FAILED.
 
 QA / Test Engineer may produce QA_PASSED or QA_FAILED.
 
-Only the Feature Orchestrator may record REVIEW_SKIPPED or QA_SKIPPED, and only
-after an explicit reply from the requesting user or a `Review: skip` /
-`QA: skip` line the requesting user wrote in the issue description. Record the
-comment ID or description line, who
-confirmed, the reason, and the revisions the skip covers. A SKIPPED state is not
-a PASS: never report it as reviewed or tested.
+Only the Feature Orchestrator may record REVIEW_SKIPPED, QA_SKIPPED, or
+ADVERSARIAL_REVIEW_SKIPPED, and only on a requester decision or standing rule
+listed in workflow-gate-policy ("Skipped review and QA"). Record the source
+(comment ID, description line, property, or rule), who confirmed, the reason,
+and the revisions the skip covers. A SKIPPED state is not a PASS: never report
+it as reviewed or tested.
 
 Only the Feature Orchestrator may declare the overall workflow COMPLETED.
 
@@ -135,7 +135,7 @@ For a child issue created by the leader for one stage or work package:
 | Parked until its entry gate passes | backlog |
 | Dispatched | todo / in_progress |
 | Member handed off evidence; leader gate check pending | in_review |
-| Leader accepted its gate (PASS, or SKIPPED by requester) and any required PR is merged into the base branch named in its packet (the integration branch for LARGE work) or explicitly not needed | done — set automatically when a merged PR carries `Closes <key>`; otherwise the leader sets it |
+| Leader accepted its gate (PASS, or SKIPPED by requester) and any required PR is merged into the base branch named in its packet (`integration/<PARENT-KEY>` when the issue has several packages in that repository) or explicitly not needed | done — set automatically when a merged PR carries `Closes <key>`; otherwise the leader sets it |
 | Failed gate with a repair cycle running on this same child | in_progress |
 | Superseded, merged into another child, or no longer needed | cancelled, with a comment linking the replacement |
 
@@ -148,9 +148,10 @@ tidy up.
 
 ## No-action triggers
 
-A duplicate callback, stale wakeup, or already-handled trigger is recorded only
-with `multica squad activity <issue-id> no_action`. Do not post an issue comment
-for it; a comment on a squad-assigned issue can wake the leader again.
+A duplicate callback, stale wakeup, or already-handled trigger gets no issue
+comment; a comment on a squad-assigned issue can wake the leader again.
+Members end such a run with one `No new work — <reason>` line
+(handoff-policy); the leader follows NO-ACTION TRIGGERS in its instructions.
 
 Record parent issue, task key, stage attempt, evidence revision(s), dispatch
 comment/child issue IDs, unresolved finding IDs, repair-cycle count, next owner,

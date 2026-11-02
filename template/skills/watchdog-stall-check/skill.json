@@ -1,0 +1,6 @@
+{
+  "name": "watchdog-stall-check",
+  "description": "Workflow Watchdog job 2: hourly stall check on a squad issue (merge watch, idle parent, lost quota resume, stall test, resume order to the leader).",
+  "config": {},
+  "labels": []
+}

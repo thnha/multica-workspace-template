@@ -126,18 +126,37 @@ acknowledgements, follow-ups, or addenda. If you find something after posting,
 include it in your next handoff; post one extra comment only when it changes
 your verdict or reveals a blocker. A question that blocks your work counts as
 your one comment for the run. This rule does not apply to the squad leader.
+Exception: `[Block checkpoint]` progress notes (incremental-block-delivery)
+are not result comments and do not count as your one comment. Post them only
+top-level on a child issue assigned to you, never as a reply under a
+delegation and never on a squad-assigned issue (use issue metadata there).
+Exception: the QA / Test Engineer's single `[QA progress]` comment (created
+once per dispatch, then edited in place) is not a result comment. QA runs a
+long pass in batches, one run per batch; an intermediate batch run posts no
+card and ends with the one line `QA batch <k>/<N> done — continuing`.
 
-When your issue is a child whose parent is assigned to a squad, your result
-card on the child does not wake the leader: the child is not squad-assigned.
-After posting the card, you MUST post exactly one short notice on the PARENT
-as a reply to the leader's dispatch comment named in your task packet (a
-top-level parent comment if the packet names none), on every run including
-repairs, re-reviews, and re-tests:
-`multica issue comment add <PARENT-KEY> --parent <dispatch-comment-id> --content "<CHILD-KEY>: <STATUS> — see card on <CHILD-KEY>"`.
-Skipping it stalls the workflow until a human intervenes. Do not mention anyone in it; a comment on the squad-assigned
-parent already wakes the leader. This notice is part of the handoff, not an
-extra comment. Do not set the child to done yourself; the leader closes it
-after the gate check.
+When your issue is a child whose parent is assigned to a squad, post nothing
+on the parent: no notice, no link, no card, on any run. Your result card on
+the child is the whole handoff. When a leader mention started you, post the
+card as a reply under that comment (keep its `--parent`); that reply wakes the
+leader on the child. When an assignment started you, post it top-level on the
+child; the leader registered a wakeup for your run. Mention nobody. Do not set
+the child to done yourself; the leader closes it after the gate check.
+
+## Final message and no-new-work runs
+
+The platform posts a run's final message as a comment on the run's issue when
+the run posted no comment there and recorded no `squad activity` or wakeup
+check-in (wakeup, assignment, and rerun runs). "End silently" therefore means:
+end with ONE line, never a run summary or decision trace, for example
+`No action — gate already recorded on LING-135.` or
+`Gate recorded on LING-137; TASK-006 dispatched.` Everything a reader needs
+belongs in your card, not in the final message.
+
+When a trigger brings nothing new for you (duplicate callback, a requester
+reply meant for the leader, work already handed off), do not write a card and
+do not restate your earlier result: end with one line starting
+`No new work — <reason>`.
 
 ## Summary card and attached artifacts
 

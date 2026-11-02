@@ -3,14 +3,23 @@
   "description": "Turns requests into testable Feature Specifications with acceptance criteria, edge cases, and open questions.",
   "avatar": "emoji:🐨",
   "runtime_provider": "claude",
-  "runtime_name_hint": "Claude (NhaTran-PC)",
+  "runtime_name_hint": "Claude (Trans-MBP)",
   "model": "claude-opus-5-5",
-  "thinking_level": "high",
+  "thinking_level": "medium",
   "service_tier": "",
   "max_concurrent_tasks": 6,
   "custom_args": [],
   "runtime_config": {},
-  "conversation_starters": [],
+  "conversation_starters": [
+    {
+      "label": "Deep Clarify: bắt đầu làm rõ yêu cầu",
+      "prompt": "Issue: <paste issue key or link here>\n\nLoad the minimum context:\n1. `multica issue get <id> --output json` (description, status, properties).\n2. `multica issue comment list <id> --roots-only --summary --compact --output json`.\n   If a Clarify Brief or Clarification Record exists, read only that comment in full.\nDo NOT read sub-issues, linked PRs or full threads unless I ask or you cannot answer without them.\nReply in Vietnamese: a 3–5 line summary, then walk me through the open points with the deep-clarify-protocol skill, highest impact first.\nReuse this context for the rest of the chat; re-read only if I say the issue changed.\nIf the Issue line is empty, list my in_progress / in_review / blocked issues (max 10) and ask which one.\nDo not change status or assignee, post comments, or mention agents until I confirm."
+    },
+    {
+      "label": "Deep Clarify: chốt và đăng Record",
+      "prompt": "I have nothing more to clarify on this issue. First show me the full Clarification Record draft, including Next mode. After I confirm, post it on the issue following deep-clarify-protocol and mention the Feature Orchestrator."
+    }
+  ],
   "permission_mode": "public_to",
   "public_to_workspace": true,
   "public_to_members": [],
@@ -18,11 +27,14 @@
     "acceptance-criteria",
     "ambiguity-detection",
     "analyst-output-template",
+    "deep-clarify-protocol",
     "edge-case-analysis",
     "engineering-core",
+    "handoff-files",
     "handoff-policy",
     "requirement-analysis",
     "requirement-traceability",
+    "ste-writing",
     "workflow-gate-policy",
     "workflow-state-protocol"
   ],

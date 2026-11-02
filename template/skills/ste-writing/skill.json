@@ -1,0 +1,6 @@
+{
+  "name": "ste-writing",
+  "description": "Use whenever you write English text that another agent or a developer must act on — task packets, acceptance criteria, requirements, implementation plan steps, handoffs, resume notes, wakeup instructions. Applies a subset of ASD-STE100 Simplified Technical English so that one reading gives one meaning.",
+  "config": {},
+  "labels": []
+}

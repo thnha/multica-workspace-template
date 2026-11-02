@@ -1,0 +1,6 @@
+{
+  "name": "watchdog-coverage-audit",
+  "description": "Workflow Watchdog job 3: scheduled audit that every open Engineering Squad issue carries its watchdog wakeups; repairs wakeups only.",
+  "config": {},
+  "labels": []
+}

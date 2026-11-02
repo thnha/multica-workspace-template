@@ -42,7 +42,14 @@ Keep its headings and order; do not add top-level sections.
   the design is not READY.
 - The validation strategy is a plan, not results; never claim tests passed.
 - Every critical FR has a row in the traceability table.
-- No planner tasks, task IDs, or assignments.
+- Apply `design-discipline` §7: give the owning component and dependency
+  direction for each change, a simpler alternative for every material AD, and
+  non-goals by ID. For a long-lived feature, Implementation Guidance names the
+  repository location where the first package stores the approved design
+  (existing docs location, else `docs/design/<ISSUE-KEY>.md`).
+- No planner tasks, task IDs, or assignments, except the section 10
+  `Work packages` table when the packet says `Planner: folded`. That table
+  does not count toward the length target.
 
 ## Readiness
 
@@ -61,3 +68,4 @@ Write the completed template to `technical-design-<ISSUE-KEY>-r<attempt>.md`
 and attach it to the summary-card result comment defined in `handoff-policy`.
 Put the workflow-state-protocol YAML in the template's Workflow Handoff
 section. Never paste the design into the comment.
+

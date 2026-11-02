@@ -1,0 +1,18 @@
+{
+  "title": "Squad hung-run check (15m)",
+  "agent": "Workflow Watchdog",
+  "mode": "run_only",
+  "issue_title_template": "",
+  "project": null,
+  "subscribers": [],
+  "status_in_source": "active",
+  "triggers": [
+    {
+      "kind": "schedule",
+      "cron": "*/15 * * * *",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "label": "15m cadence",
+      "enabled": true
+    }
+  ]
+}

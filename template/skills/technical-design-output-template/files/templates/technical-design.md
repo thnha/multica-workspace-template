@@ -18,9 +18,11 @@ Repository / base / inspected SHA:
 
 ## 3. Proposed Changes
 
-| Change | Component / path | What changes | Requirements |
-|---|---|---|---|
-| NEW / MODIFY / REUSE / REMOVE | ... | ... | FR-001 |
+| Change | Component / path | What changes | Depends on (direction) | Requirements |
+|---|---|---|---|---|
+| NEW / MODIFY / REUSE / REMOVE | ... | ... | ... → ... | FR-001 |
+
+Non-goals (by spec ID): ...
 
 <Proposed flow, only if it differs from current.>
 
@@ -30,7 +32,8 @@ Repository / base / inspected SHA:
 
 - Requirements: FR-...
 - Decision and rationale: ...
-- Alternatives rejected: ...
+- Simpler alternative and why it is insufficient: ...
+- Other alternatives rejected: ...
 - Consequences / risks: ...
 
 ## 5. Contracts, Data and Migration
@@ -85,8 +88,20 @@ Dependencies: ...
 - Work areas: ...
 - Ordering constraints: ...
 - Parallelizable work: ...
+- Design storage (long-lived feature): <repo path> | N/A
 
-No task IDs or step-by-step tasks; decomposition belongs to the Planner.
+Without `Planner: folded` in the packet: no task IDs or step-by-step tasks;
+decomposition belongs to the Planner.
+
+### Work packages
+
+N/A — Planner owns decomposition (packet without `Planner: folded`).
+
+Planner needed: NO | YES — <reason>
+
+| Package | Repo / owner | Covers (FR/AC/AD/INV) | Depends on (type) | Size | Work areas (verified) | Validation |
+|---|---|---|---|---|---|---|
+| TASK-001 | LingoBites-Server / Node Js Developer | FR-001, AC-001, INV-001 | — | M | ... | ... |
 
 ## 11. Readiness
 
@@ -98,3 +113,4 @@ Reason and blocking items: ...
 ```yaml
 <workflow-state-protocol handoff>
 ```
+

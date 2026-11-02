@@ -1,0 +1,6 @@
+{
+  "name": "preflight-check",
+  "description": "Leader preflight once per repository per parent and a developer self-check on the exact pushed SHA, to catch trivial repeat-causing errors. Applies only to issue families marked 'Preflight: on'.",
+  "config": {},
+  "labels": []
+}

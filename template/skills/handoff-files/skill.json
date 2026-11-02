@@ -1,0 +1,6 @@
+{
+  "name": "handoff-files",
+  "description": "Agent-to-agent handoffs travel as attached files behind a 3-line stub comment; full comments only when a human must act. Applies only to issue families marked 'Handoff: files'.",
+  "config": {},
+  "labels": []
+}

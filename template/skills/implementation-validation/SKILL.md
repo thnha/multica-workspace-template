@@ -112,6 +112,14 @@ Determine whether the new change introduces additional failure.
 
 Do not ignore a failure merely because it appears unrelated.
 
+## 7. CI checks
+
+CI is evidence the leader reads on the exact head; you do not run it.
+Mirror its steps locally (pre-handoff checks), then record its state once
+per the Run discipline of `software-implementation`: `CI running: <PR link>`,
+or the result when it has already finished. A check seen only in progress is
+CI running, never PASS.
+
 ## Validation Summary
 
 Use a compact matrix when useful:

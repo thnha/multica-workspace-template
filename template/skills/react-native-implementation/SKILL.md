@@ -254,7 +254,8 @@ Avoid large inline style objects when the repository uses extracted styles.
 
 Do not hardcode design values when an appropriate design token already exists.
 
-UI added to an existing screen should visually follow the surrounding implementation.
+UI added to an existing screen should visually follow the surrounding implementation,
+unless an approved mockup or design for that screen says otherwise; then the mockup wins.
 
 ---
 

@@ -1,0 +1,6 @@
+{
+  "name": "incremental-block-delivery",
+  "description": "Mandatory delivery loop for developer agents on MEDIUM/LARGE packages: per block code + tests + checks + commit + push + checkpoint, all in one run; resume from last pushed block. Planners/leaders: block plan and completion gate. Code Reviewer: test-edit checks.",
+  "config": {},
+  "labels": []
+}

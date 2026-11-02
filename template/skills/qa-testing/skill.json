@@ -1,6 +1,6 @@
 {
   "name": "qa-testing",
-  "description": "Plan and execute focused QA for an implemented feature: test planning, functional testing against acceptance criteria, and targeted regression testing with observable evidence.",
+  "description": "Plan and execute focused, risk-based QA: short risk plan, batched execution, functional and exploratory testing, fix verification and targeted regression with observable evidence.",
   "config": {},
   "labels": []
 }

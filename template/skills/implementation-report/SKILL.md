@@ -23,8 +23,11 @@ it before writing the report and keep its headings and order.
 - Copy the head SHA from command output (`git rev-parse HEAD`,
   `gh pr view --json headRefOid`); never type it from memory.
 - Include every Definition of Done criterion from the packet.
+- Fill the `Design` section on every route; on MEDIUM it is the design record
+  the Code Reviewer checks against.
 - A failure that also exists on the base SHA is PRE-EXISTING FAILURE only when
   you ran it on base.
 - Unapproved material scope expansion prevents COMPLETE.
 - COMPLETE means this task is complete; it does not assert review, QA,
   workflow completion, merge, or deployment.
+

@@ -32,6 +32,10 @@
       {
         "name": "Quick fix",
         "color": "#3b82f6"
+      },
+      {
+        "name": "Deep Clarify",
+        "color": "#ef4444"
       }
     ]
   },

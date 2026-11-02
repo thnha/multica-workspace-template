@@ -24,6 +24,11 @@ with a reason. Do not repeat the full specification or design.
 - For each MINOR, state Blocking: YES or NO. YES requires a concrete unmet
   requirement or material behavioral risk; otherwise treat it as non-blocking.
 - NIT findings are optional and never block approval.
+- Structural defects listed as MAJOR in `design-discipline` §6 (logic in the
+  wrong layer, near-duplicate of existing code, unjustified abstraction or
+  dependency, old path left alive, touched unit pushed past the size limits
+  with a new responsibility, missing Approach Note on MEDIUM) are MAJOR and
+  block approval. Cite the file/line and the existing code or rule.
 - APPROVED requires a completed review, sufficient essential evidence, and no
   unresolved blocking findings. Non-blocking improvements may remain.
 - CHANGES_REQUIRED means the review establishes at least one unresolved
@@ -116,4 +121,5 @@ For BLOCKED, list the missing prerequisite in blocked_by and set
 handoff.entry_gate_satisfied to false. Only propose a next-stage entry gate as
 satisfied when its applicable prerequisites are evidenced; review approval
 alone is not proof of every downstream prerequisite.
+
 

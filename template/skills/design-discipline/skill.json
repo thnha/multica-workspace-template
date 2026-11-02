@@ -1,0 +1,6 @@
+{
+  "name": "design-discipline",
+  "description": "Design-before-code and anti-bloat rules for Developers, Architect, Planner and Code Reviewer: Approach Note, reuse-before-write, placement and size limits, no speculative abstractions, structural review severity.",
+  "config": {},
+  "labels": []
+}

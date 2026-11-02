@@ -1,6 +1,6 @@
 ---
 name: finding-to-regression-test
-description: Turn an adversarial finding into a failing regression test on the reviewed head, hand it to the developer as a locked test on a separate branch, verify the fix turns it green, and produce the Adversarial Review Report with ADVERSARIAL_REVIEW_* workflow evidence.
+description: Turn a reliability (adversarial review) finding into a failing regression test on the reviewed head, hand it to the developer as a locked test on a separate branch, verify the fix turns it green, and produce the Adversarial Review Report with ADVERSARIAL_REVIEW_* workflow evidence.
 ---
 
 # Finding → Regression Test
@@ -20,11 +20,11 @@ You write tests only. Never change production code, even to "help".
 |---|---|---|
 | CONFIRMED | Test fails on the reviewed head with the invariant assertion | YES for BLOCKER/MAJOR; MINOR states Blocking YES/NO |
 | PLAUSIBLE | Concrete scenario, but not reproduced (state why) | No — listed as unverified risk for the leader and human approval |
-| HELD | INV attacked with the listed tests; invariant held | No — positive evidence |
+| HELD | INV checked with the listed tests; invariant held | No — positive evidence |
 | INV-GAP | State-mutating path with no declared invariant | No — routed to the invariant owner |
 
 Severity: BLOCKER = data loss/corruption, duplicated or lost learner progress,
-money/subscription error, authorization bypass. MAJOR = invariant violation
+money/subscription error, access to another user's data. MAJOR = invariant violation
 with limited blast radius or needing unusual timing. MINOR = degraded
 behavior, no invariant broken.
 
@@ -42,13 +42,13 @@ behavior, no invariant broken.
      runs DB tests from a file list, add the file to that list in the same
      commit.
    - LingoBites-App: Jest; use the real SQLite layer where the repository
-     already does, and fake timers/lifecycle only at the boundary under attack.
+     already does, and fake timers/lifecycle only at the boundary under test.
    - Concurrency: fire competing operations with `Promise.all`; use enough
      parallelism/iterations to make the race observable. Where the order must
-     be forced, use a barrier inside test-only code (test helper, injected
-     dependency the code already accepts). Do not add production seams.
-   - Partial failure / unknown outcome: inject a throw at the boundary through
-     an existing dependency injection point, or kill the operation between
+     be forced, use a barrier inside test-only code (test helper, or a
+     dependency parameter the code already accepts). Do not add production seams.
+   - Partial failure / unknown outcome: make the boundary throw through an
+     existing dependency parameter the code already accepts, or kill the operation between
      steps using test helpers.
 4. The failure must be the invariant assertion. A compile error, setup error,
    timeout, or missing fixture is not evidence of the bug; fix the test.
@@ -85,13 +85,13 @@ For each prior ADV finding on the new head:
 2. The test passes on the new head: deterministic 3/3, race tests 10/10.
 3. Mark FIXED, OPEN, or NOT VERIFIED with the SHA and command.
 
-Then attack only the changed code and previously failed INVs.
+Then check only the changed code and previously failed INVs.
 
 ## Verdict
 
 - ADVERSARIAL_REVIEW_FAILED — at least one unresolved blocking CONFIRMED
   finding, or a locked test was modified without agreement.
-- ADVERSARIAL_REVIEW_PASSED — every INV attacked (HELD or FIXED), no
+- ADVERSARIAL_REVIEW_PASSED — every INV checked (HELD or FIXED), no
   unresolved blocking CONFIRMED finding. PLAUSIBLE, INV-GAP, and TEST-INFRA
   items may remain and must be listed.
 - BLOCKED — invariant list, head SHA, repository, or any means to run tests is
@@ -114,7 +114,7 @@ summary card; never paste it into the comment.
 - Locked paths:
 
 ## Invariant coverage
-| INV | Mechanism in code (path) | Attacks tried | Result (HELD / ADV-xxx / NOT ATTACKED + reason) |
+| INV | Mechanism in code (path) | Scenarios tried | Result (HELD / ADV-xxx / NOT CHECKED + reason) |
 |---|---|---|---|
 
 ## Findings

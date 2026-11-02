@@ -1,0 +1,16 @@
+{
+  "name": "ponytail-review",
+  "description": "[PINNED: has Multica-specific edits, refresh disabled] Code review focused exclusively on over-engineering. Finds what to delete: reinvented standard library, unneeded dependencies, speculative abstractions, dead flexibility. One line per finding: location, what to cut, what replaces it. Use when the user says \"review for over-engineering\", \"what can we delete\", \"is this over-engineered\", \"simplify review\", or invokes /ponytail-review. Complements correctness-focused review, this one only hunts complexity.",
+  "config": {
+    "pinned_from": {
+      "owner": "thnha",
+      "path": "skills/ponytail-review",
+      "ref": "main",
+      "repo": "ponytail",
+      "source_url": "https://github.com/thnha/ponytail/tree/main/skills/ponytail-review",
+      "type": "github"
+    },
+    "pinned_note": "origin removed on purpose so `multica skill refresh` fails (422) instead of overwriting the Multica-specific section. Re-import manually to update."
+  },
+  "labels": []
+}

@@ -34,7 +34,8 @@ evidence explicitly; never reconstruct missing requirements or architecture.
 
 For an existing implementation, use `codebase-exploration` before decomposing,
 scoped to the planned change: source, tests, contracts, configuration. Record
-each target repository, base branch (the integration branch for LARGE work),
+each target repository, base branch (`integration/<PARENT-KEY>` when the plan has several packages
+in that repository),
 inspected commit SHA, relevant paths, and findings in the template's
 Repository Evidence / Current Architecture section. Separate verified work
 areas from assumptions, and confirm validation commands from project
@@ -68,13 +69,30 @@ Apply `work-decomposition`, `task-scope-design`, `dependency-planning`,
    per repository with per-module commits inside it; split only where risk,
    review focus, ownership, or repository differs. Mark a docs-only task whose
    target paths are fixed by the approved design as parallel (merge last).
+   Sizing check for every behavior task: its developer run (implementation +
+   validation) should fit in about 30 minutes. Split it when it combines a
+   schema/migration change with runtime behavior, touches more than about 15
+   production files or two unrelated modules, carries more than about 5
+   FR/AC items that need separate validation, or mixes new behavior with
+   removal of obsolete flows. Record the size estimate (S ≤ 15 min, M ≤ 30
+   min, L > 30 min) on each task; an L task needs a written reason why it
+   cannot be split. (LING-149 TASK-005, "remove obsolete Server and Web Admin
+   flows", ran 83 minutes in one developer run.)
 4. Give every task explicit IN SCOPE / OUT OF SCOPE, dependencies (Depends On,
    Blocks, Parallel Group), traceability to FR/BR/EC/AC/architecture
    decisions, required validation, and an objective Definition of Done.
    Good DoD: "a repeated completion request does not create a second
    completion record". Bad DoD: "implementation looks correct".
 5. Build the dependency graph, detect cycles, and only serialize tasks that
-   truly need another task's output. Parallel tasks must not share ownership
+   truly need another task's output. Each developer agent works its tasks one
+   at a time, so the critical path is the longest per-agent chain, not the
+   longest dependency chain. List each agent's serial chain with its summed
+   size estimate; start every task as soon as its real dependencies merge
+   (for example, App tasks that need only the shared contract or fixture start
+   right after that task, not after the whole Server chain). Flag a per-agent
+   chain of more than 4 tasks or about 2 hours as a schedule risk and propose
+   how to shorten it (merge mechanical tasks, move independent work to the
+   other repository's track, or ask for a second developer runtime). Parallel tasks must not share ownership
    of the same code, contract, or branch without a documented coordination
    plan.
 6. Establish shared app/server contracts before splitting Server and App

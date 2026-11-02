@@ -133,8 +133,9 @@ correctness, including:
 Read-only changes, UI-only changes, copy, styling, and behavior-preserving
 refactors covered by existing tests are not flagged.
 
-A flagged item adds invariants to its artifacts and an Adversarial Review stage
-(see orchestrator-routing). The flag never lowers or raises the level by
+A flagged item adds invariants to its artifacts; whether each package also
+gets an Adversarial Review stage follows R1 in orchestrator-routing
+("Adversarial review"). The flag never lowers or raises the level by
 itself. When uncertain, flag it.
 
 A requester line `Adversarial: required` or `Adversarial: skip` in the issue

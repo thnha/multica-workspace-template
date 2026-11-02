@@ -1,0 +1,6 @@
+{
+  "name": "watchdog-quota-guard",
+  "description": "Workflow Watchdog job 1 (failed-run guard on task.failed: quota resume, runtime fallback, transient leader retry) and job 5 (restore primary runtime after a quota fallback).",
+  "config": {},
+  "labels": []
+}

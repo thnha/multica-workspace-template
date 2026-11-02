@@ -45,6 +45,10 @@ conflict and the affected work, and ask for clarification when it is material.
 - Make the smallest change that fully satisfies approved requirements. Every
   change traces to a requirement, accepted technical need, bug cause, required
   test, or approved refactoring task.
+- "Smallest change" means the smallest change that keeps the touched code well
+  structured, not appending to the nearest file or function. A
+  behavior-preserving extraction inside the write scope, needed to land the
+  change cleanly, is part of the change; follow `design-discipline`.
 - Do not make unrelated refactoring, cleanup, renaming, formatting, dependency
   upgrades, optimization, or architecture changes; propose a separate task.
 - Preserve existing behavior and backward compatibility (APIs, protocols,
@@ -128,9 +132,12 @@ explicitly requires it with the requester's approval:
   run `run-ios`, `run-android`, `simctl install/erase`, or `adb install`.
 - Never kill a process or free a port you did not start in this run, and never
   modify the requester's checkouts outside your workdir.
-- When device validation is explicitly required (milestone QA only): create a
-  dedicated simulator with `xcrun simctl create`, target it by UDID, use a free
-  non-8081 port, and delete the simulator and stop every process you started
+- When device validation is explicitly required (milestone QA only): for iOS,
+  attach to the requester's ACTIVE booted simulator with `orca emulator attach`
+  and drive it only through `orca emulator` / `orca computer`; never create,
+  boot, erase or shut down a simulator, never use raw `xcrun simctl`, and finish
+  with `orca emulator kill` (requester decision 2026-10-05). For Android, use a
+  dedicated emulator, a free non-8081 port, and stop every process you started
   (including `log-ios`/`tee` children) before the run ends.
 - If required validation cannot run without breaking these rules, report
   BLOCKED with the command and reason; do not build a workaround.
@@ -150,3 +157,4 @@ Honest reporting:
 - Do not claim CI is running or passing unless `gh pr checks` shows it for
   that SHA; if the PR has no checks, say "no CI checks".
 - A check that exits 0 while its own output says fail is FAIL.
+

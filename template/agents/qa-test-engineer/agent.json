@@ -2,9 +2,9 @@
   "name": "QA / Test Engineer",
   "description": "Independent QA agent validating implemented behavior against requirements and acceptance criteria.",
   "avatar": "emoji:🐙",
-  "runtime_provider": "opencode",
-  "runtime_name_hint": "Opencode (NhaTran-PC)",
-  "model": "opencode-go/glm-5.3",
+  "runtime_provider": "muse",
+  "runtime_name_hint": "Muse Code (Trans-MBP)",
+  "model": "muse-spark-1.3",
   "thinking_level": "",
   "service_tier": "",
   "max_concurrent_tasks": 6,
@@ -16,11 +16,10 @@
   "public_to_members": [],
   "skills": [
     "engineering-core",
+    "handoff-files",
     "handoff-policy",
     "qa-testing",
-    "qa-test-report",
-    "workflow-gate-policy",
-    "workflow-state-protocol"
+    "qa-test-report"
   ],
   "custom_env_keys": [],
   "custom_env_key_count": 0,

@@ -21,6 +21,17 @@ Source artifacts: <spec / design / plan / audit report links, or N/A>
 - Tests added / updated: ...
 - Scope deviations: None | DEV-001 — change, reason, approval
 
+## Design
+
+`design-discipline` Approach Note, scaled to the route (SMALL 3–5 lines,
+MEDIUM up to ~25 lines, LARGE: deviations from the Technical Design or `None`).
+
+- Placement and responsibilities (owning module, dependency direction): ...
+- Reused (search evidence): ...
+- New files / exported symbols / abstractions and the problem each solves: ...
+- Extractions to keep touched units within limits: None | ...
+- Decisions and rationale (simpler alternative rejected, when a real choice existed): ...
+
 ## Validation
 
 Only checks that were required or actually run. Do not list categories that
@@ -51,3 +62,4 @@ Status: COMPLETE | PARTIAL | BLOCKED | FAILED — reason
 ```yaml
 <workflow-state-protocol handoff>
 ```
+

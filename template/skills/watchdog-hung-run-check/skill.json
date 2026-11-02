@@ -1,0 +1,6 @@
+{
+  "name": "watchdog-hung-run-check",
+  "description": "Workflow Watchdog job 4: scheduled 15-minute check that cancels and resumes or escalates hung runs and posts slow-run notices.",
+  "config": {},
+  "labels": []
+}

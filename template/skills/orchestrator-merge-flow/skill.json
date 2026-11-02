@@ -1,0 +1,6 @@
+{
+  "name": "orchestrator-merge-flow",
+  "description": "Leader-only: PR format, draft/merge safety, integration branches, package merges, final PR, merge watch, LARGE approval.",
+  "config": {},
+  "labels": []
+}
