@@ -4,6 +4,7 @@ Repo `thnha/multica-workspace-template` chứa bản chụp cấu hình của wo
 
 - **Phần A:** tạo một workspace mới giống `lingo-bites`.
 - **Phần B:** cập nhật template sau khi bạn sửa `lingo-bites`.
+- **Phần C:** nhờ agent trong workspace mới setup theo template.
 
 > Chạy mọi lệnh trong tài liệu này từ **terminal của bạn** (PowerShell, Git Bash hoặc Terminal trên Mac), **không chạy bên trong một agent Multica**. Token của agent chỉ có quyền trong workspace của task đó, nên nó không ghi được vào workspace khác. Script sẽ tự dừng nếu phát hiện trường hợp này.
 
@@ -160,10 +161,35 @@ Nếu sau đó bạn chạy `export.mjs`, bản sửa tay sẽ bị ghi đè b�
 
 ---
 
+## Phần C: Nhờ agent setup theo template
+
+Token của agent chỉ có quyền trong workspace của chính nó, nên bạn làm 3 bước đầu, agent làm phần còn lại.
+
+1. Tạo workspace trên UI (chọn tên, slug, prefix như A1).
+2. Cho daemon join workspace: `multica daemon restart`, kiểm tra `multica runtime list --workspace-id <id>`.
+3. Tạo 1 agent Claude tên **`Setup Agent`**. Đừng dùng tên trùng agent trong template (ví dụ `Multica Support Agent`), vì agent trùng tên sẽ được giữ nguyên, không nhận cấu hình template.
+4. Chat với agent:
+   ```
+   setup workspace theo template https://github.com/thnha/multica-workspace-template
+   ```
+5. Agent làm theo `docs/AGENT-SETUP.md`: chạy `node apply.mjs --self --dry-run`, báo trước sẽ tạo gì, **chờ bạn xác nhận**, chạy thật, rồi gửi báo cáo `Result` / `Key points` / `Not verified` / `Needed from you` / `Next`.
+
+### Hai giới hạn agent sẽ kiểm tra và báo lại
+
+- **L1 – Guard:** bên trong agent, script chỉ chạy thật khi workspace đích là workspace của agent (`--self`). Lớp `probe` vẫn kiểm tra thêm. Nếu bị chặn (mã thoát 3), agent báo `BLOCKED` và đưa lệnh để bạn chạy từ terminal: `node apply.mjs --workspace-id <id>`.
+- **L2 – Quyền của token agent:** chưa kiểm chứng token agent có tạo được skill, agent, squad, autopilot, property và sửa context không (đọc env agent đã biết là bị từ chối). Lệnh bị từ chối được bỏ qua, ghi vào `denied` trong `apply-report-<id>.json`, mã thoát 4, agent báo `PARTIAL` kèm hướng xử lý:
+  - A. Bạn chạy lại `node apply.mjs --workspace-id <id>` từ terminal; script chỉ tạo phần còn thiếu.
+  - B. Nhờ owner/admin cấp quyền rồi bảo agent chạy lại `--self`.
+  - C. Nếu chỉ thiếu vài mục, tạo tay trên UI.
+
+Sau khi xong, có thể đổi tên hoặc archive `Setup Agent`.
+
+---
+
 ## Câu hỏi thường gặp và xử lý lỗi
 
 **"Refusing to run inside a Multica agent task" hoặc "cannot act on workspace …"**
-Bạn đang chạy trong một agent, hoặc tài khoản CLI hiện tại không phải thành viên của workspace đích. Hãy chạy từ terminal của bạn, rồi kiểm tra `multica auth status` và `multica workspace list`.
+Bạn đang chạy trong một agent nhắm vào workspace khác (trong agent chỉ dùng được `--self`), hoặc tài khoản CLI hiện tại không phải thành viên của workspace đích. Hãy chạy từ terminal của bạn, rồi kiểm tra `multica auth status` và `multica workspace list`.
 
 **Apply bị dừng hoặc lỗi giữa chừng thì sao?**
 Chạy lại với `--workspace-id <id>`. Thứ gì đã tồn tại (so theo **tên**) sẽ được bỏ qua, script chỉ tạo phần còn thiếu.

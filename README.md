@@ -34,6 +34,7 @@ Chạy lại bao nhiêu lần cũng được: thứ gì đã tồn tại (so the
 | `--machine NhaTran-PC` | Ưu tiên runtime của máy có tên chứa chuỗi này |
 | `--with-repos` | Thêm repo vào workspace và gắn repo vào project |
 | `--activate-autopilots` | Để autopilot chạy luôn (mặc định là paused) |
+| `--self` | Chạy bên trong agent Multica: áp dụng vào chính workspace của agent (`$MULTICA_WORKSPACE_ID`) |
 | `--dry-run` | Chỉ in lệnh, không thay đổi gì |
 
 Sau khi chạy xong, script in danh sách **việc cần làm tay** và ghi file `apply-report-<workspace-id>.json` (bảng tên → ID mới).
@@ -41,6 +42,14 @@ Sau khi chạy xong, script in danh sách **việc cần làm tay** và ghi file
 Agent được gán runtime theo provider (`claude`, `opencode`, `codex`, `muse`…). Nếu có nhiều runtime cùng provider, script ưu tiên runtime trùng tên máy gốc, sau đó đến runtime đang online.
 
 Nếu workspace mới **không có runtime cùng provider**, agent vẫn được tạo trên runtime fallback (mặc định là runtime thuộc provider được dùng nhiều nhất trong template, ví dụ Claude) và dùng model mặc định của runtime đó. Script liệt kê các agent này trong phần việc cần làm tay để bạn đổi runtime/model lại. Script chỉ dừng khi workspace chưa có runtime nào.
+
+## Nhờ agent setup (trong chính workspace mới)
+
+1. Tự tạo workspace trên UI, cho daemon join (`multica daemon restart`).
+2. Tạo 1 agent Claude tên **`Setup Agent`** (tên không trùng agent nào trong template).
+3. Chat với agent: `setup workspace theo template https://github.com/thnha/multica-workspace-template`
+
+Agent làm theo [docs/AGENT-SETUP.md](docs/AGENT-SETUP.md): chạy `node apply.mjs --self --dry-run`, chờ bạn xác nhận, chạy thật, rồi báo `Result` (PASS / PARTIAL / BLOCKED). Bước nào bị từ chối quyền (token agent) được ghi vào `denied` trong report, kèm hướng xử lý.
 
 ## Cập nhật template khi config thật thay đổi
 
@@ -78,5 +87,6 @@ secrets.example.json      # khung env/MCP, không chứa giá trị thật
 
 ## Lưu ý
 
-- Không chạy `apply.mjs` từ bên trong một agent Multica. Token của agent chỉ có quyền trong workspace của task đó, nên nó sẽ bỏ qua `--workspace-id` và ghi nhầm workspace. Script tự chặn trường hợp này.
+- Bên trong agent Multica, `apply.mjs` chỉ chạy thật với `--self` (workspace đích = workspace của agent). Token của agent chỉ có quyền trong workspace của task đó, nên với workspace khác nó sẽ bỏ qua `--workspace-id` và ghi nhầm. Script tự chặn trường hợp này; lớp kiểm tra `probe` vẫn chạy thêm.
+- Chưa kiểm chứng token agent có đủ quyền tạo skill, agent, squad, autopilot, property và sửa context. Lệnh bị từ chối quyền được bỏ qua, ghi vào `denied` trong report, script thoát mã 4. Khi đó chạy lại `node apply.mjs --workspace-id <id>` từ terminal của bạn để tạo nốt phần thiếu.
 - Trên Windows, một dòng lệnh dài tối đa khoảng 32K ký tự. Instructions dài nhất hiện khoảng 20K, và script sẽ cảnh báo nếu vượt 30K.

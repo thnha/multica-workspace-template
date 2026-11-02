@@ -3,6 +3,7 @@
 //
 //   node apply.mjs --name "My WS" --slug my-ws --prefix MWS [options]
 //   node apply.mjs --workspace-id <id> [options]        # resume / apply into an existing workspace
+//   node apply.mjs --self [options]                     # inside a Multica agent task: apply into that task's workspace
 //
 // Options:
 //   --template <dir>            template folder (default ./template)
@@ -13,6 +14,7 @@
 //   --machine <text>            prefer runtimes whose name contains <text> (e.g. NhaTran-PC)
 //   --with-repos                also add workspace repos and project repo resources
 //   --activate-autopilots       leave autopilots active (default: paused)
+//   --self                      target the workspace of the running agent task ($MULTICA_WORKSPACE_ID)
 //   --dry-run                   print what would be created; changes nothing
 //
 // Re-running is safe: anything that already exists by name is reused, not duplicated.
@@ -28,13 +30,22 @@ const todo = [];      // manual follow-ups printed at the end
 const warnings = [];
 
 if (!fs.existsSync(path.join(T, "workspace.json"))) { log(`Template not found: ${T}`); process.exit(1); }
+if (args.self) {
+  if (!process.env.MULTICA_WORKSPACE_ID) { log("--self needs $MULTICA_WORKSPACE_ID (only set inside a Multica agent task)."); process.exit(1); }
+  if (args["workspace-id"] && args["workspace-id"] !== process.env.MULTICA_WORKSPACE_ID) {
+    log("--self conflicts with --workspace-id: they name different workspaces."); process.exit(1);
+  }
+  args["workspace-id"] = process.env.MULTICA_WORKSPACE_ID;
+}
 if (!args["workspace-id"] && !(args.name && args.slug)) {
-  log("Usage: node apply.mjs --name <name> --slug <slug> [--prefix <PREFIX>] | --workspace-id <id>  (see header for options)");
+  log("Usage: node apply.mjs --name <name> --slug <slug> [--prefix <PREFIX>] | --workspace-id <id> | --self  (see header for options)");
   process.exit(1);
 }
 
-if (process.env.MULTICA_TASK_ID && !dryRun) {
-  log("Refusing to run inside a Multica agent task: its token is scoped to the task's workspace. Run from your own terminal.");
+// An agent task's token is scoped to the task's workspace: it may only write into that same workspace.
+if (process.env.MULTICA_TASK_ID && !dryRun && args["workspace-id"] !== process.env.MULTICA_WORKSPACE_ID) {
+  log("Refusing to run inside a Multica agent task against another workspace: its token is scoped to the task's workspace.");
+  log("Inside an agent, use --self (applies into the agent's own workspace); otherwise run from your own terminal.");
   process.exit(3);
 }
 
@@ -83,7 +94,19 @@ if (wsId) {
 }
 const cli = makeCli({ workspaceId: wsId, dryRun, log });
 const read = (a) => (wsId ? cli(a) : null);           // reads against a not-yet-created workspace return nothing
-const mut = (a, opts = {}) => cli(a, { ...opts, mutate: true });
+// A permission error (e.g. an agent token lacking a scope) is recorded and the step skipped, so one
+// denied resource type does not hide what else would work; everything else still aborts.
+const denied = [];
+const DENIED_RE = /permission|forbidden|not allowed|unauthori[sz]ed|\b403\b/i;
+const mut = (a, opts = {}) => {
+  try { return cli(a, { ...opts, mutate: true }); }
+  catch (e) {
+    if (!DENIED_RE.test(e.message)) throw e;
+    denied.push({ command: `multica ${a.slice(0, 3).join(" ")}`, error: e.message });
+    log(`  denied: multica ${a.slice(0, 3).join(" ")}`);
+    return null;
+  }
+};
 
 // ---- placeholder resolution -----------------------------------------------------
 const ids = { agent: new Map(), skill: new Map(), squad: new Map(), project: new Map(), property: new Map(), label: new Map(), member: new Map() };
@@ -329,10 +352,16 @@ for (const e of toInvite) todo.push(`${e} is mentioned in texts but is not a mem
 // ---- report --------------------------------------------------------------------------------------
 todo.push("Agents' disabled runtime skills (per-machine toggles) are not part of the template; re-toggle in the UI if you used them.");
 if (!dryRun) {
-  const report = { workspace_id: wsId, created_workspace: created, ids: Object.fromEntries(Object.entries(ids).map(([k, m]) => [k, Object.fromEntries(m)])), todo, warnings };
+  const report = { workspace_id: wsId, created_workspace: created, ids: Object.fromEntries(Object.entries(ids).map(([k, m]) => [k, Object.fromEntries(m)])), todo, warnings, denied };
   writeJson(path.resolve(`apply-report-${wsId}.json`), report);
   log(`\nReport: apply-report-${wsId}.json`);
 }
 if (warnings.length) { log("\nWarnings:"); for (const w of warnings) log("  - " + w); }
 log("\nManual follow-ups:"); for (const t of todo) log("  - " + t);
+if (denied.length) {
+  const kinds = [...new Set(denied.map(d => d.command))];
+  log(`\nDenied (${denied.length} call(s), skipped; re-run from a member's terminal or fix permissions, then re-run):`);
+  for (const k of kinds) log(`  - ${k} x${denied.filter(d => d.command === k).length}`);
+}
 log(`\nDone. Workspace id: ${wsId || "(dry-run)"}; switch to it with: multica workspace switch ${args.slug || wsId}`);
+if (denied.length) process.exit(4);
