@@ -172,7 +172,7 @@ Token của agent chỉ có quyền trong workspace của chính nó, nên bạn
    ```
    setup workspace theo template https://github.com/thnha/multica-workspace-template
    ```
-5. Agent làm theo `docs/AGENT-SETUP.md`: chạy `node apply.mjs --self --dry-run`, báo trước sẽ tạo gì, **chờ bạn xác nhận**, chạy thật, rồi gửi báo cáo `Result` / `Key points` / `Not verified` / `Needed from you` / `Next`.
+5. Agent làm theo mục **Agent runbook** trong [README](../README.md#agent-runbook-set-up-this-workspace-from-the-template): chạy `node apply.mjs --self --dry-run`, báo trước sẽ tạo gì, **chờ bạn xác nhận**, chạy thật, rồi gửi báo cáo `Result` / `Key points` / `Not verified` / `Needed from you` / `Next`.
 
 ### Hai giới hạn agent sẽ kiểm tra và báo lại
 
